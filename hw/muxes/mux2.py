@@ -1,7 +1,7 @@
 class mux2:
 
     def __init__(self):
-        self.selector = 0
+        self.selector = hex(00)
         self.input_1 = None
         self.input_2 = None
         self.output = None
@@ -13,7 +13,7 @@ class mux2:
 
     def set_selector(self, value):
         self.selector = value
-        if self.selector == 1 or self.selector == "1":
+        if self.selector == hex(1) or self.selector == "1":
             self.set_output(self.input_2)
         else:
             self.set_output(self.input_1)
