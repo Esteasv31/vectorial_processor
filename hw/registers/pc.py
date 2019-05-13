@@ -3,8 +3,8 @@ class PC:
     def __init__(self):
         self._clk = 0
         self._reset = 1
-        self._in_pointer = 0
-        self._out_pointer = 0
+        self._in_pointer = hex(0)
+        self._out_pointer = hex(0)
 
     """ CLK define """
 
@@ -14,7 +14,7 @@ class PC:
     def set_clk(self, value):
         self._clk = value
         if self._clk == 1:
-            self._out_pointer = self.in_pointer
+            self.set_out_pointer(self.get_in_pointer)
 
     def del_clk(self):
         del self._clk
