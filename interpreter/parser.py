@@ -1,49 +1,47 @@
 from rply import ParserGenerator
-from .ast import Number, Sum, Sub, Print
+from ast import Sub
 
 
 class Parser:
 
-    def __init__(self, module, builder, printf):
+    def __init__(self):
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser.
-            ['ADDVV', 'ADDVS',
-             'SUBVV', 'SUBVS', 'SUBSV',
-             'MULVV', 'MULVS',
-             'DIVVV', 'DIVVS', 'DIVSV',
-             'LV', 'LVWS',
-             'SV', 'SVWS',
-             'CVI',
-             'SLEVV', 'SLEVS',
-             'SREVV', 'SREVS',
-             'XOREVV', 'XOREVS',
-             'COLON', 'SEMI_COLON',
-             'NUMBER'
-             ]
+            [
+                'ADDVV', 'ADDVS',
+                'SUBVV', 'SUBVS', 'SUBSV',
+                'MULVV', 'MULVS',
+                'DIVVV', 'DIVVS', 'DIVSV',
+                'LV', 'LVWS',
+                'SV', 'SVWS',
+                'CVI',
+                'SLEVV', 'SLEVS',
+                'SREVV', 'SREVS',
+                'XOREVV', 'XOREVS',
+                'OWNEP',
+                'SLDVV', 'SLDVS',
+                'SRDVV', 'SRDVS',
+                'XORDVV', 'XORDVS',
+                'OWNDP',
+                'COLON', 'SEMI_COLON',
+                'OPEN_PAREN', 'CLOSE_PAREN',
+                'NUMBER',
+                'VEC1', 'VEC2', 'VEC3',
+                'S0', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11', 'S12', 'S13', 'S14', 'S15',
+            ]
         )
-        self.module = module
-        self.builder = builder
-        self.printf = printf
 
     def parse(self):
-        @self.pg.production('program : PRINT OPEN_PAREN expression CLOSE_PAREN SEMI_COLON')
-        def program(p):
-            return Print(self.builder, self.module, self.printf, p[2])
 
-        @self.pg.production('expression : expression SUM expression')
-        @self.pg.production('expression : expression SUB expression')
+        @self.pg.production('expression : ADDVV VEC1 COLON VEC2 COLON VEC3 SEMI_COLON')
+        @self.pg.production('expression : ADDVV VEC1 COLON VEC3 COLON VEC2 SEMI_COLON')
+        @self.pg.production('expression : ADDVV VEC2 COLON VEC1 COLON VEC3 SEMI_COLON')
+        @self.pg.production('expression : ADDVV VEC2 COLON VEC3 COLON VEC1 SEMI_COLON')
+        @self.pg.production('expression : ADDVV VEC3 COLON VEC1 COLON VEC2 SEMI_COLON')
+        @self.pg.production('expression : ADDVV VEC3 COLON VEC2 COLON VEC1 SEMI_COLON')
         def expression(p):
-            left = p[0]
-            right = p[2]
-            operator = p[1]
-            if operator.gettokentype() == 'SUM':
-                return Sum(self.builder, self.module, left, right)
-            elif operator.gettokentype() == 'SUB':
-                return Sub(self.builder, self.module, left, right)
-
-        @self.pg.production('expression : NUMBER')
-        def number(p):
-            return Number(self.builder, self.module, p[0].value)
+            print("ADDVV 1")
+            return 0
 
         @self.pg.error
         def error_handle(token):
@@ -51,3 +49,4 @@ class Parser:
 
     def get_parser(self):
         return self.pg.build()
+

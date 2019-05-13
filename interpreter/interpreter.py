@@ -1,41 +1,48 @@
 from lexer import Lexer
 from parser import Parser
-from code_generator import CodeGen
-
-import datetime
 
 
-class Compiler:
+text_input = """
+ADDVV v1, v2, v3;
+ADDVV v1, v3, v2;
+ADDVV v2, v3, v1;
+ADDVV v2, v1, v3;
+ADDVV v3, v1, v2;
+ADDVV v3, v2, v1;
+ 
+ADDVS ,
+SUBVV , 
+SUBVS , 
+SUBSV ,
+MULVV , 
+MULVS ,
+DIVVV , 
+DIVVS , 
+DIVSV ,
+LV , 
+LVWS ,
+SV , 
+SVWS ,
+SLEVV , 
+SLEVS ,
+SREVV , 
+SREVS ,
+XOREVV , 
+XOREVS ,
+OWNEP ,
+SLDVV ,
+SLDVS ,
+SRDVV , 
+SRDVS ,
+XORDVV , 
+ORDVS ,
+OWNDP ,
+"""
 
-    def __init__(self):
-        self.text_input = None
-        self.lexer = None
-        self.parser = None
-        self.tokens = None
-        self.codegen = None
+lexer = Lexer().get_lexer()
+tokens = lexer.lex(text_input)
 
-    def compile(self, file_name):
-
-        with open(file_name) as f:
-            self.text_input = f.read()
-
-        self.lexer = Lexer().get_lexer()
-        self.tokens = self.lexer.lex(self.text_input)
-
-        self.codegen = CodeGen()
-
-        module = self.codegen.module
-        builder = self.codegen.builder
-        printf = self.codegen.printf
-
-        pg = Parser(module, builder, printf)
-        pg.parse()
-        parser = pg.get_parser()
-        parser.parse(self.tokens).eval()
-
-        self.codegen.create_ir()
-        self.codegen.save_ir(datetime.datetime.now() + '')
-
-
-
-
+pg = Parser()
+pg.parse()
+parser = pg.get_parser()
+parser.parse(tokens).eval()
