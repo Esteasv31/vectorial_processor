@@ -14,147 +14,147 @@
         "1010": cshiftr
     }
 """
+import time
+from hw.conf.conf import clk
 
 
-class ALU:
+def alu(control, in_x, in_y, out_res, out_x, out_y, out_control, out_z):
+    while True:
 
-    def __init__(self):
-        self.control = hex(0)
-        self.input_1 = None
-        self.input_2 = None
-        self.result = None
-        self.int_bits = 8
+        con = control.get()  # GET THE CONTROL SIGNAL
+        a = in_x.get()       # GET INPUT FROM QUEUE
+        b = in_y.get()       # GET INPUT FROM QUEUE
 
-    """ Control """
+        time.sleep(clk)      # SLEEP FOR SYNC PROCESS
 
-    def get_control(self):
-        return self.control
+        out_x.put(a)         # WRITE VALUE TO CONTROL SIGNALS
+        out_y.put(b)         # WRITE VALUE TO CONTROL SIGNALS
+        out_control.put(con)
 
-    def set_control(self, value):
-        self.control = value
-        if self.control == "0000":
-            self.result = self.add()
-        elif self.control == "0001":
-            self.result = self.sub()
-        elif self.control == "0010":
-            self.result = self.mul()
-        elif self.control == "0011":
-            self.result = self.div()
-        elif self.control == "0100":
-            self.result = self.shiftl()
-        elif self.control == "0101":
-            self.result = self.shiftr()
-        elif self.control == "0110":
-            self.result = self.xor()
-        elif self.control == "0111":
-            self.result = self.pow_()
-        elif self.control == "1000":
-            self.result = self.sqrt()
-        elif self.control == "1001":
-            self.result = self.cshiftl()
-        elif self.control == "1010":
-            self.result = self.cshiftr()
+        if con == "0000":
+            c = add(a, b)   # ADD
+            out_res.put(c)  # WRITE THE OUTPUT VALUE
+            out_z.put(c)
+        elif con == "0001":
+            c = sub(a, b)   # SUB
+            out_res.put(c)  # WRITE THE OUTPUT VALUE
+            out_z.put(c)
+        elif con == "0010":
+            c = mul(a, b)   # MULT
+            out_res.put(c)  # WRITE THE OUTPUT VALUE
+            out_z.put(c)
+        elif con == "0011":
+            c = div(a, b)   # DIV
+            out_res.put(c)  # WRITE THE OUTPUT VALUE
+            out_z.put(c)
+        elif con == "0100":
+            c = shiftl(a, b)  # SHIFT LEFT
+            out_res.put(c)  # WRITE THE OUTPUT VALUE
+            out_z.put(c)
+        elif con == "0101":
+            c = shiftr(a, b)  # SHIFT RIGHT
+            out_res.put(c)  # WRITE THE OUTPUT VALUE
+            out_z.put(c)
+        elif con == "0110":
+            c = xor(a, b)   # XOR
+            out_res.put(c)  # WRITE THE OUTPUT VALUE
+            out_z.put(c)
+        elif con == "0111":
+            c = pow_(a, b)  # POW
+            out_res.put(c)  # WRITE THE OUTPUT VALUE
+            out_z.put(c)
+        elif con == "1000":
+            c = sqrt(a, b)  # SQRT
+            out_res.put(c)  # WRITE THE OUTPUT VALUE
+            out_z.put(c)
+        elif con == "1001":
+            c = cshiftl(a, b)  # CIRCULAR SHIFT LEFT
+            out_res.put(c)  # WRITE THE OUTPUT VALUE
+            out_z.put(c)
+        elif con == "1010":
+            c = cshiftr(a, b)  # CIRCULAR SHIFT RIGHT
+            out_res.put(c)  # WRITE THE OUTPUT VALUE
+            out_z.put(c)
         else:
-            self.result = "XXXXXXXX"
+            c = "XXXXXXXX"  # DEFAULT VALUE FOR WRONG CONTROL SIGNAL
+            out_res.put(c)  # WRITE THE OUTPUT VALUE
+            out_z.put(c)
 
-    def del_control(self):
-        del self.control
 
-    control = property(get_control, set_control, del_control, 'Control')
+""" ADD """
 
-    """ Input 1 """
 
-    def get_input_1(self):
-        return self.input_1
+def add(a, b):
+    return a + b
 
-    def set_input_1(self, value):
-        self.input_1 = value
 
-    def del_input_1(self):
-        del self.input_1
+""" SUB """
 
-    input_1 = property(get_input_1, set_input_1, del_input_1, 'Input 1')
 
-    """ Input 2 """
+def sub(a, b):
+    return a - b
 
-    def get_input_2(self):
-        return self.input_2
 
-    def set_input_2(self, value):
-        self.input_2 = value
+""" MUL """
 
-    def del_input_2(self):
-        del self.input_2
 
-    input_2 = property(get_input_2, set_input_2, del_input_2, 'Input 2')
+def mul(a, b):
+    return a * b
 
-    """ Result """
 
-    def get_result(self):
-        self.control = self.set_control(self.control)
-        return self.result
+""" DIV """
 
-    def set_result(self, value):
-        self.result = value
 
-    def del_result(self):
-        del self.result
+def div(a, b):
+    return a / b
 
-    result = property(get_result, set_result, del_result, 'Result')
 
-    """ ADD """
+""" SHIFT L """
 
-    def add(self):
-        return self.input_1 + self.input_2
 
-    """ SUB """
+def shiftl(a, b):
+    return a << b
 
-    def sub(self):
-        return self.input_1 - self.input_2
 
-    """ MUL """
+""" SHIFT R """
 
-    def mul(self):
-        return self.input_1 * self.input_2
 
-    """ DIV """
+def shiftr(a, b):
+    return a >> b
 
-    def div(self):
-        return self.input_1 / self.input_2
 
-    """ SHIFT L """
+""" XOR """
 
-    def shiftl(self):
-        return self.input_1 << self.input_2
 
-    """ SHIFT R """
+def xor(a, b):
+    return a ^ b
 
-    def shiftr(self):
-        return self.input_1 >> self.input_2
 
-    """ XOR """
+""" POW """
 
-    def xor(self):
-        return self.input_1 ^ self.input_2
 
-    """ POW """
+def pow_(a, b):
+    return a ** b
 
-    def pow_(self):
-        return self.input_1 ** self.input_2
 
-    """ SQRT """
+""" SQRT """
 
-    def sqrt(self):
-        return int(self.input_1 ** (1 / self.input_2))
 
-    """ C SHIFT L """
+def sqrt(a, b):
+    return int(a ** (1 / b))
 
-    def cshiftl(self):
-        binary = "{0:b}".format(self.input_1)
-        return binary[self.input_2:len(binary)] + binary[0:self.input_2]
 
-    """ C SHIFT R """
+""" C SHIFT L """
 
-    def cshiftr(self):
-        binary = "{0:b}".format(self.input_1)
-        return binary[-self.input_2:len(binary)] + binary[0:-self.input_2]
+
+def cshiftl(a, b):
+    binary = "{0:b}".format(a)
+    return binary[b:len(binary)] + binary[0:b]
+
+
+""" C SHIFT R """
+
+
+def cshiftr(a, b):
+    binary = "{0:b}".format(a)
+    return binary[-b:len(binary)] + binary[0:-b]

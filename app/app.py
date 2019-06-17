@@ -1,24 +1,27 @@
-from scipy import misc
-import matplotlib.pyplot as plt
+import numpy
+from PIL import Image
 
-f1 = misc.imread('../test_img/01.jpeg')
-f2 = misc.imread('../test_img/02.jpg')
-f3 = misc.imread('../test_img/03.jpeg')
 
-misc.imsave('../test_img/01.png', f1)
-misc.imsave('../test_img/02.png', f2)
-misc.imsave('../test_img/03.png', f3)
+img = Image.open('/home/vidarr/Projects/TEC/Arqui_2/Proyecto_II/test_img/02.png')
+array = numpy.array(img)
+print(array.shape)
+# print(array)
+print(len(array[0]))
 
-f1 = misc.imread('../test_img/01.png')
-f2 = misc.imread('../test_img/02.png')
-f3 = misc.imread('../test_img/03.png')
-
-# plt.imshow(f1)
-# plt.show()
-print(type(f1) + ' / ' + f1.shape + ' - ' + f1.dtype)
-
-# plt.imshow(f2)
-# plt.show()
+# mask = 123456732
 #
-# plt.imshow(f3)
-# plt.show()
+# for i in range(len(array)):
+#     for j in range(len(array[0])):
+#         for k in range(len(array[0][0])):
+#             array[i][j][k] = array[i][j][k] + mask
+#
+# img = Image.fromarray(array)
+# img.save('test.png')
+#
+# for i in range(len(array)):
+#     for j in range(len(array[0])):
+#         for k in range(len(array[0][0])):
+#             array[i][j][k] = array[i][j][k] - mask
+#
+# img = Image.fromarray(array)
+# img.save('test1.png')

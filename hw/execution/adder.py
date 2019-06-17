@@ -1,50 +1,18 @@
-class adder:
+import time
+from hw.conf.conf import clk
 
-    def __init__(self):
-        self.operand_1 = hex(0)
-        self.operand_2 = hex(4)
-        self.output = self.add()
 
-    """ Operand 1 """
+def adder(in_x, out_z, out_x, out_y, out_zz):
+    while True:
+        a = in_x.get()   # GET INPUT FROM QUEUE
+        b = 1            # SET DEFAULT VALUE
 
-    def get_operand_1(self):
-        return self.operand_1
+        time.sleep(clk)  # SLEEP FOR SYNC PROCESS
 
-    def set_operand_1(self, value):
-        self.operand_1 = value
+        out_x.put(a)     # WRITE VALUE TO CONTROL SIGNALS
+        out_y.put(b)     # WRITE VALUE TO CONTROL SIGNALS
 
-    def del_operand_1(self):
-        del self.operand_1
+        c = a + b        # CALC THE OUTPUT
 
-    operand_1 = property(get_operand_1, set_operand_1, del_operand_1, 'Operand 1')
-
-    """ Operand 2 """
-
-    def get_operand_2(self):
-        return self.operand_2
-
-    def set_operand_2(self, value):
-        self.operand_2 = value
-
-    def del_operand_2(self):
-        del self.operand_2
-
-    operand_2 = property(get_operand_2, set_operand_2, del_operand_2, 'Operand 2')
-
-    """ Output """
-
-    def get_output(self):
-        return self.output
-
-    def set_output(self, value):
-        self.output = value
-
-    def del_output(self):
-        del self.output
-
-    output = property(get_output, set_output, del_output, 'Output')
-
-    """ Function """
-
-    def add(self):
-        return hex(int(self.operand_1, 16) + int(self.operand_2, 16))
+        out_z.put(c)     # WRITE THE OUTPUT VALUE
+        out_zz.put(c)    # WRITE THE OUTPUT VALUE

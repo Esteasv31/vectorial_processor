@@ -1,64 +1,46 @@
-class instr_deco_register:
+import time
+import numpy
+from hw.conf.conf import clk as _clk
 
-    def __init__(self):
-        self._clk = 0
-        self._reset = 1
-        self._in_pointer = hex(0)
-        self._out_pointer = hex(0)
 
-    """ CLK define """
+def instr_deco_register(clk, enable, clear, instrucF, instrucD, out_clk, out_en, out_clr, out_inf, out_ind):
 
-    def get_clk(self):
-        return self._clk
+    count = 0
+    inst_list = []
 
-    def set_clk(self, value):
-        self._clk = value
-        if self._clk == 1:
-            self.set_out_pointer(self.get_in_pointer)
+    while True:
+        en = enable.get()
+        clock = clk.get()
+        cls = clear.get()
 
-    def del_clk(self):
-        del self._clk
+        time.sleep(_clk)
 
-    clk = property(get_clk, set_clk, del_clk, 'CLK property')
+        if en == 1:
+            if cls == 0:
+                if clock == 1 and count == 0:
+                    z = numpy.binary_repr(0, 32)
+                    instrucD.put(z)
+                    out_ind.put(z)
+                    out_en.put(en)
+                    out_clk.put(clock)
+                    out_clr.put(cls)
+                    count += 1
+                    a = instrucF.get()
+                    inst_list.append(a)
+                    out_inf.put(a)
+                elif clock == 1 and count == 1:
+                    z = inst_list.pop(0)
+                    instrucD.put(z)
+                    out_ind.put(z)
+                    out_en.put(en)
+                    out_clk.put(clock)
+                    out_clr.put(cls)
+                    a = instrucF.get()
+                    inst_list.append(a)
+                    out_inf.put(a)
+            else:
+                count = 0
+                inst_list = []
 
-    """ RESET define """
 
-    def get_reset(self):
-        return self._reset
 
-    def set_reset(self, value):
-        self._reset = value
-        if self._reset == 0:
-            self._in_pointer = 0
-            self._out_pointer = 0
-
-    def del_reset(self):
-        del self._reset
-
-    reset = property(get_reset, set_reset, del_reset, 'RESET property')
-
-    """ IN_POINTER define """
-
-    def get_in_pointer(self):
-        return self._in_pointer
-
-    def set_in_pointer(self, value):
-        self._in_pointer = value
-
-    def del_in_pointer(self):
-        del self._in_pointer
-
-    in_pointer = property(get_in_pointer, set_in_pointer, del_in_pointer, 'IN POINTER property')
-
-    """ OUT_POINTER define """
-
-    def get_out_pointer(self):
-        return self._out_pointer
-
-    def set_out_pointer(self, value):
-        self._out_pointer = value
-
-    def del_out_pointer(self):
-        del self._out_pointer
-
-    out_pointer = property(get_out_pointer, set_out_pointer, del_out_pointer, 'OUT POINTER property')

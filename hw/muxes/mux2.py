@@ -1,63 +1,28 @@
-class mux2:
+import time
+from hw.conf.conf import clk
 
-    def __init__(self):
-        self.selector = hex(00)
-        self.input_1 = None
-        self.input_2 = None
-        self.output = None
 
-    """ Selector """
+def mux2(selector, in_x, in_y, out_z, out_x, out_y, out_zz, out_sel):
+    while True:
 
-    def get_selector(self):
-        return self.selector
+        sel = selector.get()   # GET INPUT FROM QUEUE
+        a = in_x.get()   # GET INPUT FROM QUEUE
+        b = in_y.get()   # GET INPUT FROM QUEUE
 
-    def set_selector(self, value):
-        self.selector = value
-        if self.selector == hex(1) or self.selector == "1":
-            self.set_output(self.input_2)
+        time.sleep(clk)  # SLEEP FOR SYNC PROCESS
+
+        out_x.put(a)     # WRITE VALUE TO CONTROL SIGNALS
+        out_y.put(b)     # WRITE VALUE TO CONTROL SIGNALS
+        out_sel.put(sel)
+
+        if sel == '0':
+            out_z.put(a)  # WRITE THE OUTPUT VALUE
+            out_zz.put(a)
+        elif sel == '1':
+            out_z.put(b)  # WRITE THE OUTPUT VALUE
+            out_zz.put(b)
         else:
-            self.set_output(self.input_1)
+            out_z.put("XXXXXXXX")  # WRITE THE OUTPUT VALUE
+            out_zz.put("XXXXXXXX")
 
-    def del_selector(self):
-        del self.selector
 
-    selector = property(get_selector, set_selector, del_selector, 'Selector')
-
-    """ Input 1 """
-
-    def get_input_1(self):
-        return self.input_1
-
-    def set_input_1(self, value):
-        self.input_1 = value
-
-    def del_input_1(self):
-        del self.input_1
-
-    input_1 = property(get_input_1, set_input_1, del_input_1, 'Input 1')
-
-    """ Input 2 """
-
-    def get_input_2(self):
-        return self.input_2
-
-    def set_input_2(self, value):
-        self.input_2 = value
-
-    def del_input_2(self):
-        del self.input_2
-
-    input_2 = property(get_input_2, set_input_2, del_input_2, 'Input 2')
-
-    """ Output """
-
-    def get_output(self):
-        return self.output
-
-    def set_output(self, value):
-        self.output = value
-
-    def del_output(self):
-        del self.output
-
-    output = property(get_output, set_output, del_output, 'Output')
