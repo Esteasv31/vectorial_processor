@@ -24,7 +24,6 @@ from hw.registers.mem_exe_register import mem_exe_reg
 from hw.execution.alu import alu
 
 if __name__ == '__main__':
-
     """ Queues definition """
 
     # CLK
@@ -253,7 +252,6 @@ if __name__ == '__main__':
     gz = queue.Queue()  # 180 -> out_n_e ->
     ha = queue.Queue()  # 181 -> out_im_e ->
 
-
     """ Threads definition """
 
     # CLK
@@ -286,8 +284,8 @@ if __name__ == '__main__':
 
     # CONTROL_UNIT
     thread_10 = threading.Thread(name='CONTROL_UNIT', target=control_unit, args=(bh, bi, ch, bo, bp, bq, br, bs, bt, bu,
-                                                                                    bv, bw, bx, by, bz, ca, cb, cc, cd,
-                                                                                    ce))
+                                                                                 bv, bw, bx, by, bz, ca, cb, cc, cd,
+                                                                                 ce))
 
     # MUX2_1
     thread_11 = threading.Thread(name='MUX2_1', target=mux2, args=(cf, bk, '01111', cj, ck, cl, cm, cn))
@@ -370,11 +368,10 @@ if __name__ == '__main__':
     thread_32 = threading.Thread(name='ALU_9', target=alu, args=())
 
     # VECTOR_PARALLEL
-    thread_33 = threading.Thread(name='ALU_', target=alu, args=())
+    thread_33 = threading.Thread(name='VECTOR_PARALLEL', target=vector_par, args=())
 
     #
     # thread_11 = threading.Thread(name='', target=, args=())
-
 
     """ Threads Start """
     # thread_1.start()
@@ -388,3 +385,24 @@ if __name__ == '__main__':
     # thread_9.start()
     # thread_10.start()
     # thread_11.start()
+    # thread_12.start()
+    # thread_13.start()
+    # thread_14.start()
+    # thread_15.start()
+    # thread_16.start()
+    # thread_17.start()
+    # thread_18.start()
+    # thread_19.start()
+    # thread_20.start()
+    # thread_21.start()
+    # thread_22.start()
+    # thread_23.start()
+    # thread_24.start()
+    # thread_25.start()
+    # thread_26.start()
+    # thread_27.start()
+    # thread_28.start()
+    # thread_29.start()
+    # thread_30.start()
+    # thread_31.start()
+    # thread_32.start()
